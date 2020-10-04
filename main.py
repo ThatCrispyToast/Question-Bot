@@ -1,9 +1,6 @@
 import discord
 import envariables
 import logging
-import directKeys
-from PIL import ImageGrab
-import keyboard
 
 logger = logging.getLogger('discord')
 logger.setLevel(logging.DEBUG)
