@@ -1,0 +1,3 @@
+discord.py==1.5.0
+Pillow==7.1.2
+keyboard==013.5
