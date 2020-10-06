@@ -10,11 +10,11 @@ import json
 # TODO: Create File to Store Previously Asked Questions and Pull from them Instead of Constantly Accessing Wolfram API (and taking up all my fuckin queries)
 
 # Logs Discord DEBUG Logs to discord.log
-# logger = logging.getLogger('discord')
-# logger.setLevel(logging.DEBUG)
-# handler = logging.FileHandler(filename='discord.log', encoding='utf-8', mode='w')
-# handler.setFormatter(logging.Formatter('%(asctime)s:%(levelname)s:%(name)s: %(message)s'))
-# logger.addHandler(handler)
+logger = logging.getLogger('discord')
+logger.setLevel(logging.DEBUG)
+handler = logging.FileHandler(filename='discord.log', encoding='utf-8', mode='w')
+handler.setFormatter(logging.Formatter('%(asctime)s:%(levelname)s:%(name)s: %(message)s'))
+logger.addHandler(handler)
 
 # Accesses Discord Client
 client = discord.Client()
@@ -27,8 +27,11 @@ wolframToken = envariables.wolframToken
 @client.event
 async def on_ready():
     print('Logged in as {}'.format(client.user))
-    await client.change_presence(activity=discord.Game(name="Answering Questions!"))
+    await client.change_presence(activity=discord.Game(name='"Q? help"'))
     await client.get_channel(762093041116381198).send('Bot Enabled.')
+    print("In {} servers.".format(len(client.guilds)))
+    for server in client.guilds:
+        print(server.name)
 
 
 # Detects Message Send Events
@@ -54,6 +57,12 @@ async def on_message(message):
                                     color=0x00ff00))
 
         elif 'who are you' in messageContent.lower():
+            await answer.edit(
+                embed=discord.Embed(title=str(message.author) + ' asked, "{}"'.format(messageContent),
+                                    description='I am {}.'.format(str(client.user)),
+                                    color=0x00ff00))
+            
+        elif 'your name' in messageContent.lower():
             await answer.edit(
                 embed=discord.Embed(title=str(message.author) + ' asked, "{}"'.format(messageContent),
                                     description='I am {}.'.format(str(client.user)),
