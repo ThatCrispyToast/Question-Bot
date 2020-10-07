@@ -44,7 +44,7 @@ async def on_message(message):
         if message.content == 'Q? serverlist':
             print(f'In {len(client.guilds)} servers.')
             for server in client.guilds:
-                print(server.name)
+                message.channel.send(server.name)
 
     # Only Parses Message If Proceeded with Prefix
     if message.content.startswith('Q? '):
