@@ -40,7 +40,7 @@ async def on_message(message):
         return
     
     # Admin Commands
-    if message.author.id == '330116875755323393':
+    if message.author.id == 330116875755323393:
         if message.content == 'Q? serverlist':
             print(f'In {len(client.guilds)} servers.')
             for server in client.guilds:
