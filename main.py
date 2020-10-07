@@ -29,9 +29,6 @@ async def on_ready():
     print(f'Logged in as {client.user}')
     await client.change_presence(activity=discord.Game(name='"Q? help"'))
     await client.get_channel(762093041116381198).send('Bot Enabled.')
-    print(f'In {len(client.guilds)} servers.')
-    for server in client.guilds:
-        print(server.name)
 
 
 # Detects Message Send Events
@@ -41,6 +38,13 @@ async def on_message(message):
     # Ignores all Messages Sent by Bot
     if message.author == client.user:
         return
+    
+    # Admin Commands
+    if message.author.id == '330116875755323393':
+        if message.content == 'Q? serverlist':
+            print(f'In {len(client.guilds)} servers.')
+            for server in client.guilds:
+                print(server.name)
 
     # Only Parses Message If Proceeded with Prefix
     if message.content.startswith('Q? '):
@@ -50,23 +54,20 @@ async def on_message(message):
             embed=discord.Embed(title=title,
                                 description="Answering...",
                                 color=0xffff00))
-
+        color = 0x00ff00
+        
         # Predefined Responses
         if 'who am i' in messageContent.lower():
             description = f'You are {str(message.author)}.'
-            color = 0x00ff00
 
         elif 'who are you' in messageContent.lower() or 'your name' in messageContent.lower():
             description = f'I am {str(client.user)}.'
-            color = 0x00ff00
 
         elif 'where am i' in messageContent.lower():
             description = f'You are in the #{message.channel} channel on {message.guild}.'
-            color = 0x00ff00
 
         elif messageContent.lower().startswith('help'):
             description = 'Ask me any question and I\'ll do my best to answer it!'
-            color = 0x00ff00
 
         # Sends Message to Wolfram API and Returns Result as Embed
         else:
@@ -82,14 +83,13 @@ async def on_message(message):
 
                         else:
                             description = tree[1][0].find('plaintext').text
-                            color = 0x00ff00
-
 
             # Returns if Answer Cannot be Found
             except IndexError:
                 description = 'Unable to Answer Question'
                 color = 0xff0000
 
+        # Applies title, description, and color Changes
         await answer.edit(
                     embed=discord.Embed(title=title,
                                         description=description,
