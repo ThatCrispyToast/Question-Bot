@@ -48,8 +48,8 @@ async def on_message(message):
         if message.author.id == 330116875755323393:
             if messageContent == 'admin' or messageContent == 'admin help':
                 await message.channel.send("""
-                    Q? admin servers - Lists Servers Bot is In\n
-                    Q? admin change_presence <input> - Changes Bot Rich Presence\n
+                    Q? admin servers - Lists Servers Bot is In
+                    Q? admin change_presence <input> - Changes Bot Rich Presence
                     Q? admin :clown: <input> - q? aDmiN :clown:
                     """)
                 
