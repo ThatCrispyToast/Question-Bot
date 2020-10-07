@@ -42,9 +42,9 @@ async def on_message(message):
     # Admin Commands
     if message.author.id == 330116875755323393:
         if message.content == 'Q? serverlist':
-            print(f'In {len(client.guilds)} servers.')
+            await message.channel.send(f'In {len(client.guilds)} servers.')
             for server in client.guilds:
-                message.channel.send(server.name)
+                await message.channel.send(server.name)
 
     # Only Parses Message If Proceeded with Prefix
     if message.content.startswith('Q? '):
