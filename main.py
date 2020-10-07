@@ -5,6 +5,7 @@ import logging
 from xml.etree import ElementTree
 import aiohttp
 import asyncio
+from random import choice
 
 # TODO: Create File to Store Previously Asked Questions and Pull from them Instead of Constantly Accessing Wolfram API (and taking up all my fuckin queries)
 
@@ -38,17 +39,32 @@ async def on_message(message):
     # Ignores all Messages Sent by Bot
     if message.author == client.user:
         return
-    
-    # Admin Commands
-    if message.author.id == 330116875755323393:
-        if message.content == 'Q? serverlist':
-            await message.channel.send(f'In {len(client.guilds)} servers.')
-            for server in client.guilds:
-                await message.channel.send(server.name)
 
     # Only Parses Message If Proceeded with Prefix
-    if message.content.startswith('Q? '):
+    if message.content.startswith('Q? '):     
         messageContent = message.content[3:]
+        
+        # Admin Commands
+        if message.author.id == 330116875755323393:
+            if messageContent == 'admin' or messageContent == 'admin help':
+                await message.channel.send("""
+                    Q? admin servers - Lists Servers Bot is In\n
+                    Q? admin change_presence <input> - Changes Bot Rich Presence\n
+                    Q? admin :clown: <input> - q? aDmiN :clown:
+                    """)
+                
+            if messageContent == 'admin servers':
+                await message.channel.send(f'In {len(client.guilds)} servers.')
+                for server in client.guilds:
+                    await message.channel.send(server.name)
+                    
+            if messageContent == 'admin change_presence':
+                await client.change_presence(activity=discord.Game(name=message.content[25:]))
+                
+            if messageContent == 'admin :clown:':
+                await message.channel.send(''.join(choice((str.upper, str.lower))(c) for c in message.content[17:]))
+                
+        # Regular Commands
         title = f'{str(message.author)} asked, "{messageContent}"'
         answer = await message.channel.send(
             embed=discord.Embed(title=title,
