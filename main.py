@@ -31,7 +31,7 @@ adminCommands = ['admin', 'admin help', 'admin servers']
 @client.event
 async def on_ready():
     print(f'Logged in as {client.user}')
-    await client.change_presence(activity=discord.Game(name='"Q? help"'))
+    await client.change_presence(activity=discord.Game(name='Q? help'))
     await client.get_channel(762093041116381198).send('Bot Enabled.')
 
 
@@ -65,25 +65,26 @@ async def on_message(message):
                     
                 elif messageContent == 'admin servers':
                     command = 'Servers'
-                    description = f'In {len(client.guilds)} servers.'
+                    description = f'In {len(client.guilds)} servers:'
                     for server in client.guilds:
                         description += f'\n{server.name}'
             
             title = f'Admin Command "**{command}**" Triggered'
             color = 0xb500b5 # Purple
         
+        # TODO: Replace (some) Predefined Responses with Answer Responses
         # Predefined Responses
-        elif 'who am i' in messageContent.lower():
-            description = f'You are {str(message.author)}.'
+        # // elif 'who am i' in messageContent.lower():
+        # //     description = f'You are {str(message.author)}.'
 
-        elif 'who are you' in messageContent.lower() or 'your name' in messageContent.lower():
-            description = f'I am {str(client.user)}.'
+        # // elif 'who are you' in messageContent.lower() or 'your name' in messageContent.lower():
+        # //     description = f'I am {str(client.user)}.'
 
-        elif 'where am i' in messageContent.lower():
-            description = f'You are in the #{message.channel} channel on {message.guild}.'
+        # // elif 'where am i' in messageContent.lower():
+        # //     description = f'You are in the #{message.channel} channel on {message.guild}.'
 
-        elif messageContent.lower().startswith('help'):
-            description = 'Ask me any question and I\'ll do my best to answer it!'
+        # // elif messageContent.lower().startswith('help'):
+        # //     description = 'Ask me any question and I\'ll do my best to answer it!'
         
 
         # Sends Message to Wolfram API and Returns Result as Embed
