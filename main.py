@@ -23,6 +23,9 @@ client = discord.Client()
 discordToken = envariables.discordToken
 wolframToken = envariables.wolframToken
 
+# Regular Variables
+adminCommands = ['admin', 'admin help', 'admin servers']
+
 
 # Informs of Bot Connection Information on Ready
 @client.event
@@ -43,33 +46,34 @@ async def on_message(message):
     # Only Parses Message If Proceeded with Prefix
     if message.content.startswith('Q? '):     
         messageContent = message.content[3:]
-        
-        # Admin Commands
-        if message.author.id == 330116875755323393:
-            if messageContent == 'admin' or messageContent == 'admin help':
-                await message.channel.send("""Q? admin servers - Lists Servers Bot is In\nQ? admin change_presence <input> - Changes Bot Rich Presence\nQ? admin :clown: <input> - q? aDmiN :clown:""")
-                
-            if messageContent == 'admin servers':
-                await message.channel.send(f'In {len(client.guilds)} servers.')
-                for server in client.guilds:
-                    await message.channel.send(server.name)
-                    
-            if messageContent == 'admin change_presence':
-                await client.change_presence(activity=discord.Game(name=message.content[25:]))
-                
-            if messageContent == 'admin :clown:':
-                await message.channel.send(''.join(choice((str.upper, str.lower))(c) for c in message.content[17:]))
-                
+                                    
         # Regular Commands
         title = f'{str(message.author)} asked, "{messageContent}"'
         answer = await message.channel.send(
             embed=discord.Embed(title=title,
                                 description="Answering...",
-                                color=0xffff00))
-        color = 0x00ff00
+                                color=0xffff00)) # Yellow
+        color = 0x00ff00 # Green
+        
+        # Admin Commands
+        # All Admin Commands Require You to Define a "command" and "description" Variable for Embed
+        if messageContent in adminCommands:
+            if message.author.id == 330116875755323393:
+                if messageContent in ['admin','admin help']:
+                    command = 'Help'
+                    description = "Q? admin servers - Lists Servers Bot is In"
+                    
+                elif messageContent == 'admin servers':
+                    command = 'Servers'
+                    description = f'In {len(client.guilds)} servers.'
+                    for server in client.guilds:
+                        description += f'\n{server.name}'
+            
+            title = f'Admin Command "**{command}**" Triggered'
+            color = 0xb500b5 # Purple
         
         # Predefined Responses
-        if 'who am i' in messageContent.lower():
+        elif 'who am i' in messageContent.lower():
             description = f'You are {str(message.author)}.'
 
         elif 'who are you' in messageContent.lower() or 'your name' in messageContent.lower():
@@ -80,6 +84,7 @@ async def on_message(message):
 
         elif messageContent.lower().startswith('help'):
             description = 'Ask me any question and I\'ll do my best to answer it!'
+        
 
         # Sends Message to Wolfram API and Returns Result as Embed
         else:
@@ -91,7 +96,7 @@ async def on_message(message):
                         # ? Should I Keep the Special Orange Empty Message Embed or Defaut to the Red One?
                         if tree[1][0].find('plaintext').text == None or tree[1][0].find('plaintext').text == '':
                             description = 'Answer is Empty or Missing...'
-                            color = 0xff8000
+                            color = 0xff8000 # Orange
 
                         else:
                             description = tree[1][0].find('plaintext').text
@@ -99,7 +104,7 @@ async def on_message(message):
             # Returns if Answer Cannot be Found
             except IndexError:
                 description = 'Unable to Answer Question'
-                color = 0xff0000
+                color = 0xff0000 # Red
 
         # Applies title, description, and color Changes
         await answer.edit(
