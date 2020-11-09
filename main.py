@@ -63,18 +63,19 @@ async def on_message(message):
             if message.author.id == 330116875755323393:
                 if messageContent in ['admin', 'admin help']:
                     command = 'Help'
-                    description = "Q? admin servers - Lists Servers Bot is In\nQ? admin change_presence <input> - Changes Rich Presence of Bot"
+                    description = "Q? admin servers - Lists Servers Bot is In\n~~Q? admin change_presence <input> - Changes Rich Presence of Bot~~"
 
                 elif messageContent == 'admin servers':
                     command = 'Servers'
                     description = f'In {len(client.guilds)} servers:'
                     for server in client.guilds:
                         description += f'\n{server.name}'
-                        
-                elif messageContent == 'admin change_presence':
-                    command = 'Change Presence'
-                    description = f'Changing Presence to "{messageContent[22:]}"...'
-                    await client.change_presence(activity=discord.Game(name=messageContent[22:]))
+                      
+                # ! Figure Out Why This Doesn't Work
+                # elif messageContent.startswith() == 'admin change_presence':
+                #     command = 'Change Presence'
+                #     description = f'Changing Presence to "{messageContent[22:]}"...'
+                #     await client.change_presence(activity=discord.Game(name=messageContent[22:]))
 
             title = f'Admin Command "**{command}**" Triggered'
             color = 0xb500b5  # Purple
@@ -88,19 +89,21 @@ async def on_message(message):
             try:
                 async with aiohttp.ClientSession() as session:
                     async with session.get(f'https://api.wolframalpha.com/v2/query?input={messageContent.replace("+", "plus")}&appid={wolframToken}') as response:
-                        # TODO: Change WolframAlpha Output Data Type from XML to JSON
+                        # TODO: Change WolframAlpha Output Data Type from XML to JSON Using "&output=json" at End of URL
                         tree = ElementTree.fromstring(await response.content.read())
                         # ? Should I Keep the Special Orange Empty Message Embed or Defaut to the Red One?
-                        if tree[1][0].find('plaintext').text not in [None, '']:
+                        if tree[1][0].find('plaintext').text not in [None, '', '(insufficient data available)']:
                             # Predefined Answer Responses
                             if tree[1][0].find('plaintext').text == 'My name is Wolfram|Alpha.':
-                                description = f'My name is {client.user}'
+                                description = f'My name is {client.user}.'
+                            elif tree[1][0].find('plaintext').text == 'I was created by Stephen Wolfram and his team.':
+                                description = 'I was created by @ThatCrispyToast#1483 using the Wolfram|Alpha API.'
                             else:
                                 description = tree[1][0].find('plaintext').text
 
                         else:
                             # Empty or Missing Answer
-                            description = '¯\_(ツ)_/¯'
+                            description = '(insufficient data available)'
                             color = 0xff8000  # Orange
 
             # Returns if Answer Cannot be Found
