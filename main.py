@@ -20,13 +20,8 @@ logger.addHandler(handler)
 client = discord.Client()
 
 # Initializes Tokens and API Keys from envariables
-try:
-    discordToken = os.environ['DISCORD_TOKEN']
-    wolframToken = os.environ['WOLFRAM_TOKEN']
-except:
-    import envariables
-    discordToken = envariables.discordToken
-    wolframToken = envariables.wolframToken
+discordToken = os.environ['DISCORD_TOKEN']
+wolframToken = os.environ['WOLFRAM_TOKEN']
 
 # Regular Variables
 adminCommands = ['admin', 'admin help', 'admin servers']
@@ -121,4 +116,4 @@ async def on_message(message):
 
 
 # Runs Bot... Obviously
-client.run(envariables.discordToken)
+client.run(discordToken)
