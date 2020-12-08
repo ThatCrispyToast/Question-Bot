@@ -1,11 +1,9 @@
 # Import Modules
 import discord
-import envariables
 import logging
 from xml.etree import ElementTree
 import aiohttp
-import asyncio
-from random import choice
+import os
 
 # TODO: Create File to Store Previously Asked Questions and Pull from them Instead of Constantly Accessing Wolfram API (and taking up all my fuckin queries)
 
@@ -22,12 +20,16 @@ logger.addHandler(handler)
 client = discord.Client()
 
 # Initializes Tokens and API Keys from envariables
-discordToken = envariables.discordToken
-wolframToken = envariables.wolframToken
+try:
+    discordToken = os.environ['DISCORD_TOKEN']
+    wolframToken = os.environ['WOLFRAM_TOKEN']
+except:
+    import envariables
+    discordToken = envariables.discordToken
+    wolframToken = envariables.wolframToken
 
 # Regular Variables
 adminCommands = ['admin', 'admin help', 'admin servers']
-
 
 # Informs of Bot Connection Information on Ready
 @client.event
