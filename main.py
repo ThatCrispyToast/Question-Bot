@@ -5,8 +5,6 @@ from xml.etree import ElementTree
 import aiohttp
 import os
 
-# TODO: Create File to Store Previously Asked Questions and Pull from them Instead of Constantly Accessing Wolfram API (and taking up all my fuckin queries)
-
 # Logs Discord DEBUG Logs to discord.log
 logger = logging.getLogger('discord')
 logger.setLevel(logging.DEBUG)
